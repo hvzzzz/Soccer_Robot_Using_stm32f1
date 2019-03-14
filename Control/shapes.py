@@ -14,7 +14,7 @@ while(True):
     # Display the resulting frame
     cv2.imshow('frame',frame)
     key=cv2.waitKey(1)
-    #time.sleep(0.1)
+    time.sleep(0.1)
     if key==27:
         break
 
