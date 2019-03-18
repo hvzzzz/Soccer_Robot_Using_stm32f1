@@ -9,7 +9,7 @@ while True:
     #green_hvs = cv2.cvtColor( np.uint8([[bgr]] ), cv2.COLOR_BGR2HSV)[0][0]
     hvs_frame=cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
     #red ones
-    low_red =np.array([37,0,0])
+    low_red =np.array([0,19,0])
     high_red =np.array([113,221,156])
     #green ones
     #green_hvs=np.array([108,56,56])

@@ -2,7 +2,7 @@
 //CIRCUIT DIGEST
 //Pramoth Thangavel
 char inputdata = 0;  //Variable for storing received data
-
+#include <AutoPID.h>
 void setup()
 {
     Serial1.begin(9600);                      //Sets the baud rate for bluetooth pins 
