@@ -1,13 +1,34 @@
-import serial
-locations=['/dev/ttyACM0', '/dev/ttyACM1','/dev/ttyACM2', '/dev/ttyACM3','/dev/ttyACM4', '/dev/ttyACM5','/dev/ttyUSB0','/dev/ttyUSB1','/dev/ttyUSB2','/dev/ttyUSB3', '/dev/ttyUSB4', '/dev/ttyUSB5', '/dev/ttyUSB6', '/dev/ttyUSB7', '/dev/ttyUSB8', '/dev/ttyUSB9', '/dev/ttyUSB10', 'com2', 'com3', 'com4', 'com5', 'com6', 'com7', 'com8', 'com9', 'com10', 'com11', 'com12', 'com13', 'com14', 'com15', 'com16', 'com17', 'com18', 'com19', 'com20', 'com21', 'com1', 'end']
+import numpy as np
+import cv2
+cap=cv2.VideoCapture(0)
+#trackbars
+def nothing(x):
+    pass
+cv2.namedWindow("Trackbars")
+cv2.createTrackbar('L-H','Trackbars',0,179,nothing)
+cv2.createTrackbar('L-S','Trackbars',0,255,nothing)
+cv2.createTrackbar('L-V','Trackbars',0,255,nothing)
+cv2.createTrackbar('U-H','Trackbars',0,179,nothing)
+cv2.createTrackbar('U-S','Trackbars',0,255,nothing)
+cv2.createTrackbar('U-V','Trackbars',0,255,nothing)
+cv2.setTrackbarPos('U-H','Trackbars',179)
+cv2.setTrackbarPos('U-S','Trackbars',255)
+cv2.setTrackbarPos('U-V','Trackbars',255)
+font=cv2.FONT_HERSHEY_COMPLEX_SMALL
+while True:
+    ret,frame=cap.read()
+    hsv_frame=cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
+    l_h=cv2.getTrackbarPos('L-H','Trackbars')
+    l_s=cv2.getTrackbarPos('L-S','Trackbars')
+    l_v=cv2.getTrackbarPos('L-V','Trackbars')
+    u_h=cv2.getTrackbarPos('U-H','Trackbars')
+    u_s=cv2.getTrackbarPos('U-S','Trackbars')
+    u_v=cv2.getTrackbarPos('U-V','Trackbars')
+    lower_color=np.array([l_h,l_s,l_v])#0,101,33
+    upper_color=np.array([u_h,u_s,u_v])#31,255,255
 
-for device in locations:
-	try:
-		#print "Trying...",device
-		serialport = serial.Serial(device, 2400, timeout = 0)
-		break
-	except:
-		#print "Failed to connect on",device
-		if device == 'end':
-			print "Unable to find Serial Port, Please plug in cable or check cable connections."
-			exit()
+    key=cv2.waitKey(1)
+    if key==27:
+        break
+cap.release()
+cv2.destroyAllWindows()
