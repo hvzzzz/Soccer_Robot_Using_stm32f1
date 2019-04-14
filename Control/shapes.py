@@ -11,6 +11,12 @@ cv2.createTrackbar("L-V","Trackbars",0,255,nothing)
 cv2.createTrackbar("U-H","Trackbars",179,179,nothing)
 cv2.createTrackbar("U-S","Trackbars",255,255,nothing)
 cv2.createTrackbar("U-V","Trackbars",255,255,nothing)
+cv2.setTrackbarPos('L-H','Trackbars',125)
+cv2.setTrackbarPos('L-S','Trackbars',8)
+cv2.setTrackbarPos('L-V','Trackbars',118)
+cv2.setTrackbarPos('U-H','Trackbars',179)
+cv2.setTrackbarPos('U-S','Trackbars',44)
+cv2.setTrackbarPos('U-V','Trackbars',255)
 font=cv2.FONT_HERSHEY_COMPLEX_SMALL
 while True:
     ret,frame=cap.read()
@@ -21,10 +27,10 @@ while True:
     u_h=cv2.getTrackbarPos("U-H","Trackbars")
     u_s=cv2.getTrackbarPos("U-S","Trackbars")
     u_v=cv2.getTrackbarPos("U-V","Trackbars")
-    #lower_color=np.array([l_h,l_s,l_v])#0,101,33
-    #upper_color=np.array([u_h,u_s,u_v])#31,255,255
-    lower_color=np.array([125,8,118])#0,147,31
-    upper_color=np.array([179,44,255])#18,236,255
+    lower_color=np.array([l_h,l_s,l_v])#0,101,33
+    upper_color=np.array([u_h,u_s,u_v])#31,255,255
+    #lower_color=np.array([125,8,118])#0,147,31
+    #upper_color=np.array([179,44,255])#18,236,255
     mask=cv2.inRange(hsv_frame,lower_color,upper_color)
     kernel=np.ones((5,5),np.uint8)
     mask=cv2.erode(mask,kernel)
