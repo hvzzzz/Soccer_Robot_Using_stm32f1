@@ -1,57 +1,102 @@
-#define DDRIVE_MIN -100 //The minimum value x or y can be.
-#define DDRIVE_MAX 100  //The maximum value x or y can be.
-#define MOTOR_MIN_PWM -255 //The minimum value the motor output can be.
-#define MOTOR_MAX_PWM 255 //The maximum value the motor output can be.
-int LeftMotorOutput; //will hold the calculated output for the left motor
-int RightMotorOutput; //will hold the calculated output for the right motor
-void DifferentialDriveService::CalculateTankDrive(float x, float y)
+//Set pin numbers:
+const byte joyStickYPin = A2;
+const byte joyStickXPin = A1;
+const byte motorLSpeedPin = 5;
+const byte motorLDirPin = 4;
+const byte motorRSpeedPin = 6;
+const byte motorRDirPin = 7;
+//variables
+//Joystick input variables
+int joyXValue = 0;
+int joyYValue = 0;
+int joyValueMax = 2000;
+int joyValueMin = 1000;
+int joyValueMid = 1500;
+int joyValueMidUpper = joyValueMid + 100;
+int joyValueMidLower = joyValueMid - 100;
+//DC motor variables
+int speedFwd = 0;
+int speedTurn = 0;
+int speedLeft = 0;
+int speedRight = 0;
+byte motorSpeed = 0;
+byte motorSpeedMax = 255;
+byte motorSpeedMin = 90; //set to smallest value that make motor move (default 0)
+                         // DC motor that I use start to move at 90 pwm value
+void setup()
 {
-    float rawLeft;
-    float rawRight;
-    float RawLeft;
-    float RawRight;
- // first Compute the angle in deg
- // First hypotenuse
-    float z = sqrt(x * x + y * y);
-// angle in radians
-    float rad = acos(abs(x) / z);
-// Cataer for NaN values
-    if (isnan(rad) == true) 
+    Serial.begin(9600);
+    Serial.print("START" );
+    pinMode(joyStickXPin, INPUT);
+    pinMode(joyStickYPin, INPUT);
+    pinMode(motorLSpeedPin, OUTPUT);
+    pinMode(motorLDirPin, OUTPUT);
+    pinMode(motorRSpeedPin, OUTPUT);
+    pinMode(motorRDirPin, OUTPUT);
+}
+void MoveRobot(int spdL, int spdR)
+{
+    if(spdL>0)
     {
-        rad = 0;
-    }
-// and in degrees
-    float angle = rad * 180 / PI;
-// Now angle indicates the measure of turn
- // Along a straight line, with an angle o, the turn co-efficient is same
- // this applies for angles between 0-90, with angle 0 the co-eff is -1
- // with angle 45, the co-efficient is 0 and with angle 90, it is 1
-    float tcoeff = -1 + (angle / 90) * 2;
-    float turn = tcoeff * abs(abs(y) - abs(x));
-    turn = round(turn * 100) / 100;
-// And max of y or x is the movement
-    float mov = max(abs(y), abs(x));
-// First and third quadrant
-    if ((x >= 0 && y >= 0) || (x < 0 && y < 0))
-    {
-        rawLeft = mov; rawRight = turn;
+        digitalWrite(motorLDirPin, HIGH);
     }
     else
     {
-        rawRight = mov; rawLeft = turn;
+        digitalWrite(motorLDirPin, LOW);
     }
-// Reverse polarity
-    if (y < 0) 
+    if(spdR>0)
     {
-        rawLeft = 0 - rawLeft;
-        rawRight = 0 - rawRight;
+        digitalWrite(motorRDirPin, HIGH);
     }
-
-    // Update the values
-    RawLeft = rawLeft;
-    RawRight = rawRight;
-
-    // Map the values onto the defined rang
-    LeftMotorOutput = map(rawLeft, DDRIVE_MIN, DDRIVE_MAX, MOTOR_MIN_PWM, MOTOR_MAX_PWM);
-    RightMotorOutput = map(rawRight, DDRIVE_MIN, DDRIVE_MAX, MOTOR_MIN_PWM, MOTOR_MAX_PWM);
+    else
+    {
+        digitalWrite(motorRDirPin, LOW);
+    }
+    analogWrite(motorLSpeedPin, abs(spdL));
+    analogWrite(motorRSpeedPin, abs(spdR));    
+}
+void loop()
+{
+   // joyXValue = analogRead(joyStickXPin); //Turn
+   // joyYValue = analogRead(joyStickYPin); //Forward/backward
+    joyXValue = pulseIn(joyStickXPin,HIGH);
+    joyYValue = pulseIn(joyStickYPin,HIGH);
+    if(joyYValue > joyValueMidUpper)//forward
+    {
+        speedFwd = map(joyYValue, joyValueMidUpper, joyValueMax, motorSpeedMin, motorSpeedMax);
+    }
+    else if(joyYValue < joyValueMidLower) //backward
+    {
+        speedFwd = map(joyYValue, joyValueMidLower, joyValueMin, -motorSpeedMin, -motorSpeedMax);
+    }
+    else
+    {
+        speedFwd =0;
+    }
+    if(joyXValue > joyValueMidUpper) //right
+    {
+        speedTurn = map(joyXValue, joyValueMidUpper, joyValueMax, motorSpeedMin, motorSpeedMax);
+    }
+    else if(joyXValue < joyValueMidLower) //left
+    {
+        speedTurn = map(joyXValue, joyValueMidLower, joyValueMin, -motorSpeedMin, -motorSpeedMax);
+    }
+    else
+    {
+        speedTurn =0;
+    }
+    speedLeft = speedFwd + speedTurn;
+    speedRight = speedFwd - speedTurn;
+    speedLeft = constrain(speedLeft, -255, 255);
+    speedRight = constrain(speedRight, -255, 255);
+    MoveRobot(speedLeft,speedRight);
+    Serial.print(speedFwd);
+    Serial.print("\t" );
+    Serial.print(speedTurn);
+    Serial.print("\t" );
+    Serial.print(speedLeft);
+    Serial.print("\t" );
+    Serial.print(speedRight);
+    Serial.println(" ");
+    delay(100);
 }
