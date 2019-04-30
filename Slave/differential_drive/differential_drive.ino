@@ -70,7 +70,7 @@ void loop()
         speedFwd = map(joyYValue, joyValueMidLower, joyValueMin, -motorSpeedMin, -motorSpeedMax);
     }
     else
-    {
+    {   
         speedFwd =0;
     }
     if(joyXValue > joyValueMidUpper) //right
