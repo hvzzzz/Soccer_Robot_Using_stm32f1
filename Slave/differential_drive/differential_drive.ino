@@ -9,8 +9,8 @@ const byte motorRDirPin = 7;
 //Joystick input variables
 int joyXValue = 0;
 int joyYValue = 0;
-int joyValueMax = 2000;
-int joyValueMin = 1000;
+int joyValueMax = 40;
+int joyValueMin = -40;
 int joyValueMid = 1500;
 int joyValueMidUpper = joyValueMid + 100;
 int joyValueMidLower = joyValueMid - 100;
@@ -59,13 +59,14 @@ void loop()
 {
    // joyXValue = analogRead(joyStickXPin); //Turn
    // joyYValue = analogRead(joyStickYPin); //Forward/backward
+    
     joyXValue = pulseIn(joyStickXPin,HIGH);
     joyYValue = pulseIn(joyStickYPin,HIGH);
-    if(joyYValue > joyValueMidUpper)//forward
+    if(joyYValue > 0)//forward
     {
         speedFwd = map(joyYValue, joyValueMidUpper, joyValueMax, motorSpeedMin, motorSpeedMax);
     }
-    else if(joyYValue < joyValueMidLower) //backward
+    else if(joyYValue < 0) //backward
     {
         speedFwd = map(joyYValue, joyValueMidLower, joyValueMin, -motorSpeedMin, -motorSpeedMax);
     }
@@ -73,11 +74,11 @@ void loop()
     {   
         speedFwd =0;
     }
-    if(joyXValue > joyValueMidUpper) //right
+    if(joyXValue > 0) //right
     {
         speedTurn = map(joyXValue, joyValueMidUpper, joyValueMax, motorSpeedMin, motorSpeedMax);
     }
-    else if(joyXValue < joyValueMidLower) //left
+    else if(joyXValue < 0) //left
     {
         speedTurn = map(joyXValue, joyValueMidLower, joyValueMin, -motorSpeedMin, -motorSpeedMax);
     }

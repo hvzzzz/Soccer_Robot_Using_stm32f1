@@ -20,8 +20,11 @@ void loop()
 {
    if(Serial1.available() > 0)      // Send data only when you receive data:
    {
-      inputdata = Serial1.read();        //Read the incoming data & store into data     
-      if(inputdata == '1') 
+      inputdata = Serial1.read();        //Read the incoming data & store into a string     
+      Serial1.print(inputdata);
+      Serial1.print("\n");
+      /*
+      if(inputdata == "1 9") 
       {
          digitalWrite(PB12, HIGH);
          digitalWrite(PB13, LOW);
@@ -33,7 +36,7 @@ void loop()
          Serial1.print("ADELANTE\n");
       }
          
-      else if(inputdata == '0')  
+      else if(inputdata == "0 7")  
       {      
          digitalWrite(PB12, LOW);
          digitalWrite(PB13, HIGH);
@@ -44,7 +47,7 @@ void loop()
          analogWrite(PA7, 250);   
          Serial1.print("ATRAS\n");  
       }
-      else if(inputdata == '2')
+      else if(inputdata == "2")
       {
          digitalWrite(PB12, LOW);
          digitalWrite(PB13, LOW);
@@ -54,5 +57,6 @@ void loop()
          analogWrite(PA7, 0);   
          Serial1.print("PARAR\n");
       }
+      */
    }
 }
