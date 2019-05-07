@@ -1,7 +1,7 @@
 import pygame
 import serial
 import time
-def to_bin_and_string(number):
+def to_bin_and_string(number):#returns a string containing the number in binay form 
     aans=''
     if number>0:
         ans=bin(number)
@@ -18,8 +18,8 @@ def sender(snumber):
     for i in range(l):
         temporary=snumber[i]
         bluetooth.write(temporary.encode())
-        input_data=bluetooth.readline()
-        print(input_data.decode())
+        #input_data=bluetooth.readline()
+        #print(input_data.decode())
     bluetooth.write(' '.encode())
 pygame.init()
 win = pygame.display.set_mode((500,10))
@@ -32,8 +32,6 @@ x = 50
 xcont=0
 y = 50
 ycont=0
-width = 40
-height = 60
 vel = 5
 run = True
 i=0
@@ -75,20 +73,22 @@ while run:
         #print (ycont)
         #bluetooth.write(str(ycont).encode())
     #armamos el string que mandaremos al micro
-    sxcont=str(xcont)
-    sycont=str(ycont)
+    #sxcont=str(xcont)
+    #sycont=str(ycont)
+    sxcont=to_bin_and_string(xcont)
+    sycont=to_bin_and_string(ycont)
     send=sxcont+' '+sycont
     #print(send)
     if i>1:
         if send!=prevdata:
-            bluetooth.write(send.encode())
+            #bluetooth.write(sxcont.encode())
+            #bluetooth.write(sycont.encode())
+            sender(sxcont)
+            sender(sycont)
             received=bluetooth.readline()
             print(received.decode())
             #print(send)
     prevdata=send
-    #win.fill((0,0,0))  # Fills the screen with black
-    #pygame.draw.rect(win, (255,0,0), (x, y, width, height))   
-    #pygame.display.update()
 bluetooth.close() #Otherwise the connection will remain open until a timeout which ties up the /dev/thingamabob
 print("Done")
 #bluetooth.close()    
