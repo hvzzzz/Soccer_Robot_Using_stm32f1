@@ -33,35 +33,15 @@ bluetooth=serial.Serial(port, 9600)#Start communications with the bluetooth unit
 print("Connected")
 #bluetooth.write(b"BOOP "+str.encode(str(i)))#These need to be bytes not unicode, plus a number
 bluetooth.flushInput() #This gives the bluetooth a little kick
-while True:
-    #data=input()
+#while True:
+for i in range(-10,11): #send 5 groups of data to the bluetooth
+    data=i
+    print(i)
+    temp=to_bin_and_string(i);
+    sender(temp)
     #bluetooth.write(data.encode())
     #input_data=bluetooth.readline()
     #print(input_data.decode())
-    data=int(input())
-    #temp=to_bin_and_string(data)
-    #print(temp)
-    #l=len(temp)
-    #temporary=''
-    for i in range(data):
-        bluetooth.write('1'.encode())
-        input_data=bluetooth.readline()
-        print(input_data.decode())
-    #    temporary=temp[i]
-    #    print(temporary)
-    #    print("\n")
-        #bluetooth.write(temporary.encode())
-        #print("pass0")
-        #input_data=bluetooth.readline()
-        #print(input_data.decode())
-    #print("\n")
-    #sender(temp)
-    #bluetooth.write(temp.encode())
-    #print("pass0")
-    #input_data=bluetooth.readline()
-    #print("pass1")
-    #print(input_data.decode())
-#for i in range(-10,11): #send 5 groups of data to the bluetooth
     #if (i%2==0):
         #temp='1 9'
         #print('pass1')

@@ -34,12 +34,13 @@ void initial(int *p,int len,int val)
 }
 int constructor(int *number,int len)
 {
-   bool sign=true;//positive number
+   bool sign=true;
    int rebuilt=0;
    int count=0;
+    //int *temp=number;
    if(*number==1)
-      sign=false;//negative number
-   //number++;
+      sign=false;
+    //number++;
    for(int ii=0;ii<len;ii++)
    {
       if(*number!=2)
@@ -49,13 +50,13 @@ int constructor(int *number,int len)
    number=number-len+1;
    for(int i=1;i<count;i++)
    {
-      if(*number!=2)
+      if(*number!=2)    
          rebuilt=rebuilt+*number*pow(2,count-(i+1));
       number++;
    }
    if(!sign)
       rebuilt=rebuilt*-1;
-   return (rebuilt);
+   return(rebuilt);
 }
 void loop()
 {
@@ -63,26 +64,52 @@ void loop()
    {
       received_data = Serial1.read();        //Read the incoming data & store into a string     
       //Serial1.print("pass");
+      /*
+      Serial1.print("meter is: ");
+      Serial1.print(meter);
+      Serial1.print("\n");
+      Serial1.print("data is: ");
+      Serial1.print(received_data);
+      Serial1.print("\n");
+      Serial1.print("i is: ");
+      Serial1.print(i);
+      Serial1.print("\n");
+      */
+      /*
       if(received_data=='1')
       {
          //i++;
          //String out=String(i);
          Serial1.print("one\n");
+         //Serial1.print(meter);
       }
       if(received_data=='0')
-            Serial1.print("ZERO\n");
-      /*
+         Serial1.print("ZERO\n");
+      */
+
       if(meter==0||meter==1)//fills the x coordinate array
       {
          if(received_data=='1')
             datas[i]=1;
-         i++;
+         if(received_data=='0')
+            datas[i]=0;
+         /*
+         for(int ii=0;ii<5;ii++)
+         {
+            Serial1.print(datas[ii]);
+            Serial1.print(" ");
+         }
+         Serial1.print("\n");
+         */
+         if(received_data=='0'||received_data=='1'||received_data=='3')
+            i++;
          if(received_data=='3')
          {
             i=0;
             meter++;
-            if(meter)
+            if(meter==1)
             {
+               //Serial1.print("pass0");
                int*p=datas;
                int*p00=datas;
                x_dat=constructor(p,5);
@@ -90,35 +117,42 @@ void loop()
             }
          }
       }
-      */
-      //if(meter==2)//fills the y coordinate array
-      //{
-         //meter=0;
-         //int *p1=datas;
-         //int *p000=datas;
-         //y_dat=constructor(p1,5);
-         //initial(p000,5,2);
-         /*
-         if(x_dat>0) 
+      if(meter==2)//fills the y coordinate array
+      {
+         meter=0;
+         int *p1=datas;
+         int *p000=datas;
+         y_dat=constructor(p1,5);
+         initial(p000,5,2);
+         //Serial1.print("pass\n");
+         if(y_dat>0) 
          {
+            //Serial1.print("posx\n");
             digitalWrite(PB12, HIGH);
+            digitalWrite(PB13, LOW);
+            digitalWrite(PB14, LOW);
          }
-         if(x_dat==0)
+         if(y_dat==0)
          {
+            //Serial1.print("zero\n");
             digitalWrite(PB13, HIGH);
+            digitalWrite(PB12, LOW);
+            digitalWrite(PB14, LOW);
          }
-         if(x_dat<0)
+         if(y_dat<0)
          {
+            //Serial1.print("negx\n");
             digitalWrite(PB14, HIGH);
-         } 
-         */   
+            digitalWrite(PB12, LOW);
+            digitalWrite(PB13, LOW);
+         }   
          //Serial1.print("x is: ");
          //Serial1.print(x_dat);
          //Serial1.print(" ");
          //Serial1.print("y is: ");
          //Serial1.print(y_dat);
          //Serial1.print("\n");
-      //}
+      }
       //printf("%d %d",x_value,y_value);
       //String out=String(x_value)+" "+String(y_value)+"\n";
       //Serial1.print(out);
