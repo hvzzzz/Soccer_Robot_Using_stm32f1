@@ -8,7 +8,7 @@ def to_bin_and_string(number):
         aans='0'+aans
     elif  number<0:
         ans=bin(number)
-        aans=ans[2:]
+        aans=ans[3:]
         aans='1'+aans
     return aans
 def sender(snumber):
@@ -17,21 +17,23 @@ def sender(snumber):
     for i in range(l):
         temporary=snumber[i]
         bluetooth.write(temporary.encode())
-        input_data=bluetooth.readline()
-        print(input_data.decode())
-    bluetooth.write(' '.encode())
+        #input_data=bluetooth.readline()
+        #print(input_data.decode())
+    bluetooth.write('3'.encode())
 print("Start")
 port="COM9" #This will be different for various devices and on windows it will probably be a COM port.
 bluetooth=serial.Serial(port, 9600)#Start communications with the bluetooth unit
 print("Connected")
 #bluetooth.write(b"BOOP "+str.encode(str(i)))#These need to be bytes not unicode, plus a number
 bluetooth.flushInput() #This gives the bluetooth a little kick
-for i in range(6): #send 5 groups of data to the bluetooth
-    data=10
+for i in range(10): #send 5 groups of data to the bluetooth
+    data=i
     temp=to_bin_and_string(data)
     #print(i)
     #print("\n")
     sender(temp)
+    input_data=bluetooth.readline()
+    print(input_data.decode())
     #if (i%2==0):
         #temp='1 9'
         #print('pass1')
@@ -46,7 +48,7 @@ for i in range(6): #send 5 groups of data to the bluetooth
     #print('pass5')
     #These are bytes coming in so a decode is needed
     #print('pass6')
-    time.sleep(1) #A pause between bursts
+    #time.sleep(1) #A pause between bursts
 #bluetooth.write('2'.encode())
 bluetooth.close() #Otherwise the connection will remain open until a timeout which ties up the /dev/thingamabob
 print("Done")

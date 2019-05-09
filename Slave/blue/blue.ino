@@ -2,14 +2,17 @@
 //CIRCUIT DIGEST
 //Pramoth Thangavel
 char received_data = 0;  //Variable for storing received data
-int xdat[5];
-int ydat[5];
+int datas[5];
+int *p0=datas;
+int i=0;
+int meter=0;
+int x_dat=0;
+int y_dat=0;
 bool status=true;//used for the switching between right and left;true is right;just to make sure :)
 //#include <AutoPID.h>
 void setup()
 {
-   memset(xdat,0,sizeof(xdat));//fills the x array of zeros
-   memset(ydat,0,sizeof(ydat));//fills the y array of zeros
+   initial(p0,5,2);//fill the data array with two's
    Serial1.begin(9600);                      //Sets the baud rate for bluetooth pins 
    Serial1.print("BLUETOOTH WITH STM32\n");                     
    pinMode(PB12, OUTPUT);                  //Sets digital pin PA0 as output pin for led
@@ -21,16 +24,33 @@ void setup()
    pinMode(PA6, OUTPUT);
    pinMode(PA7, OUTPUT);
 }
+void initial(int *p,int len,int val)
+{
+   for(int i=0;i<len;i++)
+   {
+      *p=val;
+      p++;
+   }
+}
 int constructor(int *number,int len)
 {
    bool sign=true;//positive number
    int rebuilt=0;
+   int count=0;
    if(*number==1)
       sign=false;//negative number
-   number++;
-   for(int i=1;i<len;i++)
+   //number++;
+   for(int ii=0;ii<len;ii++)
    {
-      rebuilt=rebuilt+*number*pow(2,len-(i+1));
+      if(*number!=2)
+         count++;
+      number++;
+   }
+   number=number-len+1;
+   for(int i=1;i<count;i++)
+   {
+      if(*number!=2)
+         rebuilt=rebuilt+*number*pow(2,count-(i+1));
       number++;
    }
    if(!sign)
@@ -42,40 +62,58 @@ void loop()
    if(Serial1.available() > 0)      // Send data only when you receive data:
    {
       received_data = Serial1.read();        //Read the incoming data & store into a string     
-      if(status)//fills the x coordinate array
+      if(meter==0||meter==1)//fills the x coordinate array
       {
-         int i=0;
-         while(received_data!=' ')
+         if(received_data=='1')
+            datas[i]=1;
+         i++;
+         if(received_data=='3')
          {
-            if(received_data=='1')
+            i=0;
+            meter++;
+            if(meter)
             {
-               xdat[i]==1;
+               int*p=datas;
+               int*p00=datas;
+               x_dat=constructor(p,5);
+               initial(p00,5,2);
             }
-            i++;
          }
-         status=false;
       }
-      int *x_point=xdat;
-      int x_value=constructor(x_point,5);
-      if(!status)//fills the y coordinate array
+      if(meter==2)//fills the y coordinate array
       {
-         int i=0;
-         while(received_data!=' ')
+         meter=0;
+         int *p1=datas;
+         int *p000=datas;
+         y_dat=constructor(p1,5);
+         initial(p000,5,2);
+         /*
+         if(x_dat>0) 
          {
-            if(received_data=='1')
-            {
-               ydat[i]==1;
-            }
-            i++;
+            digitalWrite(PB12, HIGH);
          }
-         status=true;
+         if(x_dat==0)
+         {
+            digitalWrite(PB13, HIGH);
+         }
+         if(x_dat<0)
+         {
+            digitalWrite(PB14, HIGH);
+         } 
+         */   
+         //Serial1.print("x is: ");
+         Serial1.print(x_dat);
+         Serial1.print(" ");
+         //Serial1.print("y is: ");
+         Serial1.print(y_dat);
+         Serial1.print("\n");
       }
-      int *y_point=ydat;
-      int y_value=constructor(y_point,5);
+      /* 
+      */
       //printf("%d %d",x_value,y_value);
       //String out=String(x_value)+" "+String(y_value)+"\n";
       //Serial1.print(out);
-      Serial1.print(x_value);
+      //Serial1.print(x_value);
       //Serial1.print(" ");
       //Serial1.print(String(y_value));
       //Serial1.print("\n");
