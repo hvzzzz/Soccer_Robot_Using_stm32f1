@@ -62,6 +62,16 @@ void loop()
    if(Serial1.available() > 0)      // Send data only when you receive data:
    {
       received_data = Serial1.read();        //Read the incoming data & store into a string     
+      //Serial1.print("pass");
+      if(received_data=='1')
+      {
+         //i++;
+         //String out=String(i);
+         Serial1.print("one\n");
+      }
+      if(received_data=='0')
+            Serial1.print("ZERO\n");
+      /*
       if(meter==0||meter==1)//fills the x coordinate array
       {
          if(received_data=='1')
@@ -80,13 +90,14 @@ void loop()
             }
          }
       }
-      if(meter==2)//fills the y coordinate array
-      {
-         meter=0;
-         int *p1=datas;
-         int *p000=datas;
-         y_dat=constructor(p1,5);
-         initial(p000,5,2);
+      */
+      //if(meter==2)//fills the y coordinate array
+      //{
+         //meter=0;
+         //int *p1=datas;
+         //int *p000=datas;
+         //y_dat=constructor(p1,5);
+         //initial(p000,5,2);
          /*
          if(x_dat>0) 
          {
@@ -102,14 +113,12 @@ void loop()
          } 
          */   
          //Serial1.print("x is: ");
-         Serial1.print(x_dat);
-         Serial1.print(" ");
+         //Serial1.print(x_dat);
+         //Serial1.print(" ");
          //Serial1.print("y is: ");
-         Serial1.print(y_dat);
-         Serial1.print("\n");
-      }
-      /* 
-      */
+         //Serial1.print(y_dat);
+         //Serial1.print("\n");
+      //}
       //printf("%d %d",x_value,y_value);
       //String out=String(x_value)+" "+String(y_value)+"\n";
       //Serial1.print(out);
