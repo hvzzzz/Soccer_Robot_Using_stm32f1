@@ -19,14 +19,7 @@ def sender(snumber):
     temporary=''
     for i in range(l):
         temporary=snumber[i]
-        #print(temporary)
-        #print("\n")
         bluetooth.write(temporary.encode())
-        #input_data=bluetooth.readline()
-        #print(input_data.decode())
-        #time.sleep(1)
-    #print('3')
-    #print("\n")
     bluetooth.write('3'.encode())
 pygame.init()
 win = pygame.display.set_mode((500,10))
@@ -56,48 +49,33 @@ while run:
         xcont-=1
         if xcont<-10:
             xcont=-10
-        #print (xcont)
-        #bluetooth.write(str(xcont).encode())
     if keys[pygame.K_RIGHT]:
         x += vel
         xcont+=1
         if xcont>10:
             xcont=10
-        #print (xcont)
-        #bluetooth.write(str(xcont).encode())
     if keys[pygame.K_UP]:
         y -= vel
         ycont+=1
         if ycont>10:
             ycont=10
-        #print (ycont)
-        #bluetooth.write(str(ycont).encode())
     if keys[pygame.K_DOWN]:
         y += vel
         ycont-=1
         if ycont<-10:
             ycont=-10
-        #print (ycont)
-        #bluetooth.write(str(ycont).encode())
-    #armamos el string que mandaremos al micro
-    #sxcont=str(xcont)
-    #sycont=str(ycont)
     sxcont=to_bin_and_string(xcont)
     sycont=to_bin_and_string(ycont)
+    send1=str(xcont)+' '+str(ycont)
     send=sxcont+' '+sycont
-    #print(send)
     if i>1:
         if send!=prevdata:
-            #bluetooth.write(sxcont.encode())
-            #bluetooth.write(sycont.encode())
             sender(sxcont)
             sender(sycont)
-            print(send)
-    #received=bluetooth.readline()
-    #print(received.decode())
-    #print(sxcont)
+            print(send1)
+            #received=bluetooth.readline()
+            #print(received.decode())
     prevdata=send
-#bluetooth.close() #Otherwise the connection will remain open until a timeout which ties up the /dev/thingamabob
 print("Done")
 bluetooth.close()    
 pygame.quit()

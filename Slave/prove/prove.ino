@@ -1,8 +1,13 @@
-void setup()
+int val=0;
+void setup() 
 {
-    mystr='1 4';
+    Serial.begin(9600);
 }
-void loop()
+void loop() 
 {
-
+    if(Serial1.available() > 0)
+    { 
+        val = map(val, 0, 10, 25, 50);
+        Serial.write(val);
+    }
 }

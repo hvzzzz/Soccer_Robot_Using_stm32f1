@@ -19,8 +19,8 @@ void setup()
    pinMode(PB13, OUTPUT);
    pinMode(PB14, OUTPUT);
    pinMode(PB15, OUTPUT);
-   //pinMode(PA5, OUTPUT);
-   //pinMode(PA4, OUTPUT);
+   pinMode(PA5, OUTPUT);
+   pinMode(PA4, OUTPUT);
    pinMode(PA6, OUTPUT);
    pinMode(PA7, OUTPUT);
 }
@@ -125,27 +125,73 @@ void loop()
          y_dat=constructor(p1,5);
          initial(p000,5,2);
          //Serial1.print("pass\n");
+         Serial1.print("r dat: ");
+         Serial1.print(x_dat);
+         Serial1.print(" ");
+         Serial1.print(y_dat);
+         Serial1.print("\n");
          if(y_dat>0) 
          {
             //Serial1.print("posx\n");
-            digitalWrite(PB12, HIGH);
-            digitalWrite(PB13, LOW);
+            digitalWrite(PB12, LOW);
+            digitalWrite(PB13, HIGH);
             digitalWrite(PB14, LOW);
+            digitalWrite(PB15, LOW);
+            digitalWrite(PA5, LOW);
+            digitalWrite(PA4, LOW);
          }
          if(y_dat==0)
          {
             //Serial1.print("zero\n");
-            digitalWrite(PB13, HIGH);
+            digitalWrite(PB13, LOW);
             digitalWrite(PB12, LOW);
             digitalWrite(PB14, LOW);
+            digitalWrite(PB15, LOW);
+            digitalWrite(PA5, LOW);
+            digitalWrite(PA4, HIGH);
          }
          if(y_dat<0)
          {
-            //Serial1.print("negx\n");
-            digitalWrite(PB14, HIGH);
-            digitalWrite(PB12, LOW);
+            //Serial1.print("zero\n");
             digitalWrite(PB13, LOW);
-         }   
+            digitalWrite(PB12, LOW);
+            digitalWrite(PB14, LOW);
+            digitalWrite(PB15, HIGH);
+            digitalWrite(PA5, LOW);
+            digitalWrite(PA4, LOW);
+         }
+         /*
+         if(x_dat>0)
+         {
+            //Serial1.print("zero\n");
+            digitalWrite(PB13, LOW);
+            digitalWrite(PB12, HIGH);
+            digitalWrite(PB14, LOW);
+            digitalWrite(PB15, LOW);
+            digitalWrite(PA5, LOW);
+            digitalWrite(PA4, LOW);
+         } 
+         if(x_dat==0)
+         {
+            //Serial1.print("zero\n");
+            digitalWrite(PB13, LOW);
+            digitalWrite(PB12, LOW);
+            digitalWrite(PB14, LOW);
+            digitalWrite(PB15, LOW);
+            digitalWrite(PA5, HIGH);
+            digitalWrite(PA4, LOW);
+         } 
+         if(x_dat<0)
+         {
+            //Serial1.print("zero\n");
+            digitalWrite(PB13, LOW);
+            digitalWrite(PB12, LOW);
+            digitalWrite(PB14, HIGH);
+            digitalWrite(PB15, LOW);
+            digitalWrite(PA5, LOW);
+            digitalWrite(PA4, LOW);
+         }
+         */   
          //Serial1.print("x is: ");
          //Serial1.print(x_dat);
          //Serial1.print(" ");
@@ -160,30 +206,29 @@ void loop()
       //Serial1.print(" ");
       //Serial1.print(String(y_value));
       //Serial1.print("\n");
-      /*
-      if(inputdata == "1 9") 
+      if(received_data == '1') 
       {
          digitalWrite(PB12, HIGH);
          digitalWrite(PB13, LOW);
          digitalWrite(PB14, HIGH);
          digitalWrite(PB15, LOW);
          //digitalWrite(PA5, HIGH);
-         analogWrite(PA6, 250);
-         analogWrite(PA7, 250); 
+         analogWrite(PA6, 65);
+         analogWrite(PA7, 65); 
          Serial1.print("ADELANTE\n");
       }
-      else if(inputdata == "0 7")  
+      else if(received_data == '0')  
       {      
          digitalWrite(PB12, LOW);
          digitalWrite(PB13, HIGH);
          digitalWrite(PB14, LOW);
          digitalWrite(PB15, HIGH);
          //digitalWrite(PA4, HIGH);
-         analogWrite(PA6, 250);
-         analogWrite(PA7, 250);   
+         analogWrite(PA6, 70);
+         analogWrite(PA7, 70);   
          Serial1.print("ATRAS\n");  
       }
-      else if(inputdata == "2")
+      else if(received_data == '2')
       {
          digitalWrite(PB12, LOW);
          digitalWrite(PB13, LOW);
@@ -193,6 +238,5 @@ void loop()
          analogWrite(PA7, 0);   
          Serial1.print("PARAR\n");
       }
-      */
    }
 }

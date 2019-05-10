@@ -1,10 +1,12 @@
 //Set pin numbers:
 //const byte joyStickYPin = A2;
 //const byte joyStickXPin = A1;
-const byte motorLSpeedPin = 5;
-const byte motorLDirPin = 4;
-const byte motorRSpeedPin = 6;
-const byte motorRDirPin = 7;
+const byte motorL1DirPin = PB12;
+const byte motorLDirPin = PB13;
+const byte motorR1DirPin = PB14;
+const byte motorRDirPin = PB15;
+const byte motorLSpeedPin = PA7;
+const byte motorRSpeedPin = PA6;
 //my variables
 char received_data = 0;  //Variable for storing received data
 int datas[5];
@@ -14,7 +16,6 @@ int meter=0;
 int x_dat=0;
 int y_dat=0;
 bool status=true;//used for the switching between right and left;true is right;just to make sure :)
-
 //variables
 //Joystick input variables
 int joyXValue = 0;
@@ -31,40 +32,19 @@ int speedLeft = 0;
 int speedRight = 0;
 byte motorSpeed = 0;
 byte motorSpeedMax = 255;
-byte motorSpeedMin = 90; //set to smallest value that make motor move (default 0)
-                         // DC motor that I use start to move at 90 pwm value
+byte motorSpeedMin = 110; //set to smallest value that make motor move (default 0)
+// DC motor that I use start to move at 90 pwm value
 void setup()
 {
     initial(p0,5,2);//fill the data array with two's
     Serial1.begin(9600);                      //Sets the baud rate for bluetooth pins 
     Serial1.print("BLUETOOTH WITH STM32\n");   
-    pinMode(joyStickXPin, INPUT);
-    pinMode(joyStickYPin, INPUT);
+    pinMode(motorR1DirPin, OUTPUT);
+    pinMode(motorL1DirPin, OUTPUT);
     pinMode(motorLSpeedPin, OUTPUT);
     pinMode(motorLDirPin, OUTPUT);
     pinMode(motorRSpeedPin, OUTPUT);
     pinMode(motorRDirPin, OUTPUT);
-}
-void MoveRobot(int spdL, int spdR)
-{
-    if(spdL>0)
-    {
-        digitalWrite(motorLDirPin, HIGH);
-    }
-    else
-    {
-        digitalWrite(motorLDirPin, LOW);
-    }
-    if(spdR>0)
-    {
-        digitalWrite(motorRDirPin, HIGH);
-    }
-    else
-    {
-        digitalWrite(motorRDirPin, LOW);
-    }
-    analogWrite(motorLSpeedPin, abs(spdL));
-    analogWrite(motorRSpeedPin, abs(spdR));    
 }
 void initial(int *p,int len,int val)
 {
@@ -132,50 +112,75 @@ void loop()
             int *p1=datas;
             int *p000=datas;
             y_dat=constructor(p1,5);
-            initial(p000,5,2); 
+            initial(p000,5,2);
+            joyXValue = x_dat;
+            joyYValue = y_dat;
+            if(joyYValue > 0)//forward
+            {
+                speedFwd = map(joyYValue, joyValueMidUpper, joyValueMax, motorSpeedMin, motorSpeedMax);
+            }
+            else if(joyYValue < 0) //backward
+            {
+                speedFwd = map(joyYValue, joyValueMidLower, joyValueMin, -motorSpeedMin, -motorSpeedMax);
+            }
+            else
+            {   
+                speedFwd =0;
+            }
+            if(joyXValue > 0) //right
+            {
+                speedTurn = map(joyXValue, joyValueMidUpper, joyValueMax, motorSpeedMin, motorSpeedMax);
+            }
+            else if(joyXValue < 0) //left
+            {
+                speedTurn = map(joyXValue, joyValueMidLower, joyValueMin, -motorSpeedMin, -motorSpeedMax);
+            }
+            else
+            {
+                speedTurn =0;
+            }
+            speedLeft = speedFwd + speedTurn;
+            speedRight = speedFwd - speedTurn;
+            speedLeft = constrain(speedLeft, -255, 255);
+            speedRight = constrain(speedRight, -255, 255);
+            MoveRobot(speedLeft,speedRight);
+            /*
+            Serial1.print(speedFwd);
+            Serial1.print(" ");
+            Serial1.print(speedTurn);
+            Serial1.print(" ");
+            Serial1.print(speedLeft);
+            Serial1.print(" ");
+            Serial1.print(speedRight);
+            Serial1.print("\n");
+            */
+            delay(100);
         }
     }
-   // joyXValue = analogRead(joyStickXPin); //Turn
-   // joyYValue = analogRead(joyStickYPin); //Forward/backward
-    
-    joyXValue = x_dat;
-    joyYValue = y_dat;
-    if(joyYValue > 0)//forward
+}
+void MoveRobot(int spdL, int spdR)
+{
+    if(spdL>0)//controlls the speed of one wheel if the speed of the wheel if positive
+    //this means that the wheel must rotate in that direction
     {
-        speedFwd = map(joyYValue, joyValueMidUpper, joyValueMax, motorSpeedMin, motorSpeedMax);
-    }
-    else if(joyYValue < 0) //backward
-    {
-        speedFwd = map(joyYValue, joyValueMidLower, joyValueMin, -motorSpeedMin, -motorSpeedMax);
-    }
-    else
-    {   
-        speedFwd =0;
-    }
-    if(joyXValue > 0) //right
-    {
-        speedTurn = map(joyXValue, joyValueMidUpper, joyValueMax, motorSpeedMin, motorSpeedMax);
-    }
-    else if(joyXValue < 0) //left
-    {
-        speedTurn = map(joyXValue, joyValueMidLower, joyValueMin, -motorSpeedMin, -motorSpeedMax);
+        digitalWrite(motorL1DirPin, HIGH);
+        digitalWrite(motorLDirPin, LOW);
     }
     else
     {
-        speedTurn =0;
+        digitalWrite(motorL1DirPin, LOW);
+        digitalWrite(motorLDirPin, HIGH);
     }
-    speedLeft = speedFwd + speedTurn;
-    speedRight = speedFwd - speedTurn;
-    speedLeft = constrain(speedLeft, -255, 255);
-    speedRight = constrain(speedRight, -255, 255);
-    MoveRobot(speedLeft,speedRight);
-    Serial.print(speedFwd);
-    Serial.print("\t" );
-    Serial.print(speedTurn);
-    Serial.print("\t" );
-    Serial.print(speedLeft);
-    Serial.print("\t" );
-    Serial.print(speedRight);
-    Serial.println(" ");
-    delay(100);
+    if(spdR>0)
+    {
+        digitalWrite(motorR1DirPin, HIGH);
+        digitalWrite(motorRDirPin, LOW);
+    }
+    else
+    {
+        digitalWrite(motorR1DirPin, LOW);
+        digitalWrite(motorRDirPin, HIGH);
+    }
+    analogWrite(motorLSpeedPin, abs(spdL));
+    analogWrite(motorRSpeedPin, abs(spdR));    
 }
