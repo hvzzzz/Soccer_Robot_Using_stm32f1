@@ -75,6 +75,13 @@ while run:
             print(send1)
             #received=bluetooth.readline()
             #print(received.decode())
+        else:
+            xcont=0;
+            ycont=0;
+            sxcont=to_bin_and_string(xcont)
+            sycont=to_bin_and_string(ycont)
+            sender(sxcont)
+            sender(sycont)
     prevdata=send
 print("Done")
 bluetooth.close()    

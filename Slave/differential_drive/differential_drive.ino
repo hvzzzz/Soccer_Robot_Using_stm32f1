@@ -23,8 +23,8 @@ int joyYValue = 0;
 int joyValueMax = 10;
 int joyValueMin = -10;
 int joyValueMid = 0;
-int joyValueMidUpper = joyValueMid + 3;
-int joyValueMidLower = joyValueMid - 3;
+int joyValueMidUpper = joyValueMid + 0;
+int joyValueMidLower = joyValueMid - 0;
 //DC motor variables
 int speedFwd = 0;
 int speedTurn = 0;
@@ -141,20 +141,21 @@ void loop()
             }
             speedLeft = speedFwd + speedTurn;
             speedRight = speedFwd - speedTurn;
+            //speedRight = speedFwd + speedTurn;
+            //speedLeft = speedFwd - speedTurn;
             speedLeft = constrain(speedLeft, -255, 255);
             speedRight = constrain(speedRight, -255, 255);
-            MoveRobot(speedLeft,speedRight);
-            /*
-            Serial1.print(speedFwd);
-            Serial1.print(" ");
-            Serial1.print(speedTurn);
-            Serial1.print(" ");
-            Serial1.print(speedLeft);
-            Serial1.print(" ");
-            Serial1.print(speedRight);
-            Serial1.print("\n");
-            */
-            delay(100);
+            //MoveRobot(speedLeft,speedRight);
+            MoveRobot(speedRight,speedLeft);
+            //Serial1.print(speedFwd);
+            //Serial1.print(" ");
+            //Serial1.print(speedTurn);
+            //Serial1.print(" ");
+            //Serial1.print(speedLeft);
+            //Serial1.print(" ");
+            //Serial1.print(speedRight);
+            //Serial1.print("\n");
+            //delay(100);
         }
     }
 }
