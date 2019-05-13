@@ -4,7 +4,7 @@ cap=cv2.VideoCapture(0)
 #trackbars
 def nothing(x):
     pass
-#cv2.namedWindow("Trackbars")
+cv2.namedWindow("Trackbars")
 cv2.createTrackbar("L-H","Trackbars",0,179,nothing)
 cv2.createTrackbar("L-S","Trackbars",0,255,nothing)
 cv2.createTrackbar("L-V","Trackbars",0,255,nothing)
@@ -21,10 +21,10 @@ while True:
     u_h=cv2.getTrackbarPos("U-H","Trackbars")
     u_s=cv2.getTrackbarPos("U-S","Trackbars")
     u_v=cv2.getTrackbarPos("U-V","Trackbars")
-    #lower_color=np.array([l_h,l_s,l_v])#0,101,33
-    #upper_color=np.array([u_h,u_s,u_v])#31,255,255
-    lower_color=np.array([0,101,33])#0,147,31
-    upper_color=np.array([18,255,255])#18,236,255
+    lower_color=np.array([l_h,l_s,l_v])#0,101,33
+    upper_color=np.array([u_h,u_s,u_v])#31,255,255
+    #lower_color=np.array([0,101,33])#0,147,31
+    #upper_color=np.array([18,255,255])#18,236,255
     mask=cv2.inRange(hsv_frame,lower_color,upper_color)
     kernel=np.ones((5,5),np.uint8)
     mask=cv2.erode(mask,kernel)

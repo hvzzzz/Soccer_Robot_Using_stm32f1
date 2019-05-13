@@ -52,71 +52,71 @@ while run:
     if keys[pygame.K_LEFT]:
         x -= vel
         x1cont-=1
-        if xcont<-10:
-            xcont=-10
+        if x1cont<-10:
+            x1cont=-10
     if keys[pygame.K_RIGHT]:
         x += vel
         x1cont+=1
-        if xcont>10:
-            xcont=10
+        if x1cont>10:
+            x1cont=10
     if keys[pygame.K_UP]:
         y -= vel
         y1cont+=1
-        if ycont>10:
-            ycont=10
+        if y1cont>10:
+            y1cont=10
     if keys[pygame.K_DOWN]:
         y += vel
         y1cont-=1
-        if ycont<-10:
-            ycont=-10
+        if y1cont<-10:
+            y1cont=-10
     #second player
     if keys[pygame.K_a]:
         x -= vel
         x2cont-=1
-        if xcont<-10:
-            xcont=-10
+        if x2cont<-10:
+            x2cont=-10
     if keys[pygame.K_d]:
         x += vel
         x2cont+=1
-        if xcont>10:
-            xcont=10
+        if x2cont>10:
+            x2cont=10
     if keys[pygame.K_w]:
         y -= vel
         y2cont+=1
-        if ycont>10:
-            ycont=10
+        if y2cont>10:
+            y2cont=10
     if keys[pygame.K_s]:
         y += vel
         y2cont-=1
-        if ycont<-10:
-            ycont=-10
+        if y2cont<-10:
+            y2cont=-10
     #third player
     if keys[pygame.K_j]:
         x -= vel
         x3cont-=1
-        if xcont<-10:
-            xcont=-10
+        if x3cont<-10:
+            x3cont=-10
     if keys[pygame.K_l]:
         x += vel
         x3cont+=1
-        if xcont>10:
-            xcont=10
+        if x3cont>10:
+            x3cont=10
     if keys[pygame.K_i]:
         y -= vel
         y3cont+=1
-        if ycont>10:
-            ycont=10
+        if y3cont>10:
+            y3cont=10
     if keys[pygame.K_k]:
         y += vel
         y3cont-=1
-        if ycont<-10:
-            ycont=-10
+        if y3cont<-10:
+            y3cont=-10
     #sending data to the other scripts
     
     #sending data to bluetooth
-    sxcont=to_bin_and_string(xcont)
-    sycont=to_bin_and_string(ycont)
-    send1=str(xcont)+' '+str(ycont)
+    sxcont=to_bin_and_string(x2cont)
+    sycont=to_bin_and_string(y2cont)
+    send1=str(x2cont)+' '+str(y2cont)
     send=sxcont+' '+sycont
     if i>1:
         if send!=prevdata:
@@ -126,10 +126,10 @@ while run:
             #received=bluetooth.readline()
             #print(received.decode())
         else:
-            xcont=0;
-            ycont=0;
-            sxcont=to_bin_and_string(xcont)
-            sycont=to_bin_and_string(ycont)
+            x2cont=0;
+            y2cont=0;
+            sxcont=to_bin_and_string(x2cont)
+            sycont=to_bin_and_string(y2cont)
             sender(sxcont)
             sender(sycont)
     prevdata=send

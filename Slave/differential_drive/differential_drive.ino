@@ -112,6 +112,11 @@ void loop()
             int *p1=datas;
             int *p000=datas;
             y_dat=constructor(p1,5);
+            Serial1.print("data: ");
+            Serial1.print(x_dat);
+            Serial1.print(" ");
+            Serial1.print(y_dat);
+            Serial1.print("\n");
             initial(p000,5,2);
             joyXValue = x_dat;
             joyYValue = y_dat;
