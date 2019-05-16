@@ -1,10 +1,13 @@
-from multiprocessing import Queue
-q = Queue()                            # instantiate a Queue object
-q.put('hello world')                   # add a string object to the queue
-q.put(['this', 'is a', 'list'])        # add a list object to the queue
-q.put(3.14)                            # add a number to the queue
-print ('Queue size   ==> ', q.qsize())   # report on the size of the queue
-print ('1st element  ==> ', q.get())     # pop item off queue and report
-print ('2nd element  ==> ', q.get())
-print ('3rd element  ==> ', q.get())
-print ('Queue size   ==> ', q.qsize())
+book ={}
+book['play2']={
+    'xcoord':0
+    'ycoord':0
+}
+book['play3']={
+    'xcoord':0
+    'ycoord':0
+}
+import json
+s=json.dumps(book)
+with open("C://Users//hanan//Google Drive//P//Soccer Robot//Soccer_Robot_Using_stm32f1//Control"."w") as f:
+    f.write(s)
