@@ -1,12 +1,21 @@
 //Set pin numbers:
 //const byte joyStickYPin = A2;
 //const byte joyStickXPin = A1;
+/*
 const byte motorL1DirPin = PB12;
 const byte motorLDirPin = PB13;
 const byte motorR1DirPin = PB14;
 const byte motorRDirPin = PB15;
 const byte motorLSpeedPin = PA7;
 const byte motorRSpeedPin = PA6;
+*/
+
+const byte motorL1DirPin = PD2;
+const byte motorLDirPin = PD4;
+const byte motorR1DirPin = PD7;
+const byte motorRDirPin = PB0;
+const byte motorLSpeedPin = PD5;
+const byte motorRSpeedPin = PD6;
 //my variables
 char received_data = 0;  //Variable for storing received data
 int datas[5];
@@ -37,8 +46,9 @@ byte motorSpeedMin = 110; //set to smallest value that make motor move (default 
 void setup()
 {
     initial(p0,5,2);//fill the data array with two's
-    Serial1.begin(9600);                      //Sets the baud rate for bluetooth pins 
-    Serial1.print("BLUETOOTH WITH STM32\n");   
+    //Serial1.begin(9600);                      //Sets the baud rate for bluetooth pins 
+    Serial.begin(9600);  
+    //Serial1.print("BLUETOOTH WITH STM32\n");   
     pinMode(motorR1DirPin, OUTPUT);
     pinMode(motorL1DirPin, OUTPUT);
     pinMode(motorLSpeedPin, OUTPUT);
@@ -82,9 +92,11 @@ int constructor(int *number,int len)
 }
 void loop()
 {
-    if(Serial1.available() > 0)      // Send data only when you receive data:,outputs x_dat and y_dat
+    //if(Serial1.available() > 0)      // Send data only when you receive data:,outputs x_dat and y_dat
+    if(Serial.available() > 0)
     {
-        received_data = Serial1.read();        //Read the incoming data & store into a string     
+        received_data = Serial.read();
+        //received_data = Serial1.read();        //Read the incoming data & store into a string     
         if(meter==0||meter==1)//fills the x coordinate array
         {
             if(received_data=='1')
@@ -112,11 +124,11 @@ void loop()
             int *p1=datas;
             int *p000=datas;
             y_dat=constructor(p1,5);
-            Serial1.print("data: ");
-            Serial1.print(x_dat);
-            Serial1.print(" ");
-            Serial1.print(y_dat);
-            Serial1.print("\n");
+            //Serial1.print("data: ");
+            //Serial1.print(x_dat);
+            //Serial1.print(" ");
+            //Serial1.print(y_dat);
+            //Serial1.print("\n");
             initial(p000,5,2);
             joyXValue = x_dat;
             joyYValue = y_dat;
@@ -144,10 +156,10 @@ void loop()
             {
                 speedTurn =0;
             }
-            speedLeft = speedFwd + speedTurn;
+            //speedLeft = speedFwd + speedTurn;
+            //speedRight = speedFwd - speedTurn;
             speedRight = speedFwd - speedTurn;
-            //speedRight = speedFwd + speedTurn;
-            //speedLeft = speedFwd - speedTurn;
+            speedLeft = speedFwd +  speedTurn;
             speedLeft = constrain(speedLeft, -255, 255);
             speedRight = constrain(speedRight, -255, 255);
             //MoveRobot(speedLeft,speedRight);
@@ -187,6 +199,6 @@ void MoveRobot(int spdL, int spdR)
         digitalWrite(motorR1DirPin, LOW);
         digitalWrite(motorRDirPin, HIGH);
     }
-    analogWrite(motorLSpeedPin, abs(spdL));
-    analogWrite(motorRSpeedPin, abs(spdR));    
+    analogWrite(motorLSpeedPin, abs(spdR));
+    analogWrite(motorRSpeedPin, abs(spdL));    
 }
