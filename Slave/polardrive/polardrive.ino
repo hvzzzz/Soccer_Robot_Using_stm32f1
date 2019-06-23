@@ -9,12 +9,14 @@ const byte motorRDirPin = PB15;
 const byte motorLSpeedPin = PA7;
 const byte motorRSpeedPin = PA6;
 
-//const byte motorL1DirPin = PD2;
-//const byte motorLDirPin = PD4;
-//const byte motorR1DirPin = PD7;
-//const byte motorRDirPin = PB0;
-//const byte motorLSpeedPin = PD5;
-//const byte motorRSpeedPin = PD6;
+/*
+const byte motorL1DirPin = PD2;
+const byte motorLDirPin = PD4;
+const byte motorR1DirPin = PD7;
+const byte motorRDirPin = PB0;
+const byte motorLSpeedPin = PD5;
+const byte motorRSpeedPin = PD6;
+*/
 //my variables
 char received_data = 0;  //Variable for storing received data
 int datas[5];
@@ -131,6 +133,7 @@ void loop()
             initial(p000,5,2);
             joyXValue = x_dat;
             joyYValue = y_dat;
+            
             if(joyYValue > 0)//forward
             {
                 speedFwd = map(joyYValue, joyValueMidUpper, joyValueMax, motorSpeedMin, motorSpeedMax);

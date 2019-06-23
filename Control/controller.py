@@ -25,7 +25,7 @@ def sender(snumber):
 pygame.init()
 win = pygame.display.set_mode((500,10))
 pygame.display.set_caption("First Game")
-port="COM14" #This will be different for various devices and on windows it will probably be a COM port.
+port="COM23" #This will be different for various devices and on windows it will probably be a COM port.
 bluetooth=serial.Serial(port,9600)#Start communications with the bluetooth unit
 print("Connected")
 bluetooth.flushInput() 
@@ -56,29 +56,30 @@ while run:
     if keys[pygame.K_ESCAPE]:
         run=False
     #first player
-    if keys[pygame.K_LEFT]:
-        x -= vel
-        x1cont-=1
-        if x1cont<-10:
-            x1cont=-10
-    if keys[pygame.K_RIGHT]:
-        x += vel
-        x1cont+=1
-        if x1cont>10:
-            x1cont=10
-    if keys[pygame.K_UP]:
-        y -= vel
-        y1cont+=1
-        if y1cont>10:
-            y1cont=10
-    if keys[pygame.K_DOWN]:
-        y += vel
-        y1cont-=1
-        if y1cont<-10:
-            y1cont=-10
+    #if keys[pygame.K_LEFT]:
+    #    x -= vel
+    #    x1cont-=1
+    #    if x1cont<-10:
+    #       x1cont=-10
+    #if keys[pygame.K_RIGHT]:
+    #    x += vel
+    #    x1cont+=1
+    #    if x1cont>10:
+    #        x1cont=10
+    #if keys[pygame.K_UP]:
+    #    y -= vel
+    #    y1cont+=1
+    #    if y1cont>10:
+    #        y1cont=10
+    #if keys[pygame.K_DOWN]:
+    #    y += vel
+    #    y1cont-=1
+    #    if y1cont<-10:
+    #        y1cont=-10
     #second player
     if keys[pygame.K_d]:
         x -= vel
+        time.sleep(0.01)
         x2cont+=1
         if x2cont>10:
             x2cont=10
@@ -88,6 +89,7 @@ while run:
     if keys[pygame.K_a]:
         x += vel
         x2cont-=1
+        time.sleep(0.01)
         if x2cont<-10:
             x2cont=-10
         #x2cont+=1
@@ -110,26 +112,26 @@ while run:
         #if y2cont<-10:
             #y2cont=-10
     #third player
-    if keys[pygame.K_j]:
-        x -= vel
-        x3cont-=1
-        if x3cont<-10:
-            x3cont=-10
-    if keys[pygame.K_l]:
-        x += vel
-        x3cont+=1
-        if x3cont>10:
-            x3cont=10
-    if keys[pygame.K_i]:
-        y -= vel
-        y3cont+=1
-        if y3cont>10:
-            y3cont=10
-    if keys[pygame.K_k]:
-        y += vel
-        y3cont-=1
-        if y3cont<-10:
-            y3cont=-10
+    #if keys[pygame.K_j]:
+        #x -= vel
+        #x3cont-=1
+        #if x3cont<-10:
+        #    x3cont=-10
+    #if keys[pygame.K_l]:
+    #    x += vel
+    #    x3cont+=1
+    #    if x3cont>10:
+    #        x3cont=10
+    #if keys[pygame.K_i]:
+    #    y -= vel
+    #    y3cont+=1
+    #    if y3cont>10:
+    #        y3cont=10
+    #if keys[pygame.K_k]:
+    #    y += vel
+    #    y3cont-=1
+    #    if y3cont<-10:
+    #        y3cont=-10
     #sending data to the other scripts
     #coords = { "xcoord": x2cont, "ycoord": y2cont } 
     #pickle.dump( coords, open( "save.p", "wb" ) )
@@ -143,6 +145,10 @@ while run:
     #    f.write(s)
     #with open("C://Users//hanan//Google Drive//P//Soccer Robot//Soccer_Robot_Using_stm32f1//Control//play3.txt","w") as f:
     #    f.write(ss)
+    if x2cont==10 and y2cont==0 :
+        x2cont=1
+    if x2cont==-10 and y2cont==0 :
+        x2cont=-1
     #sending data to bluetooth
     sxcont2=to_bin_and_string(x2cont)
     sycont2=to_bin_and_string(y2cont)
